@@ -1,5 +1,7 @@
 package gmailSpam.ui.pages;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,6 +25,8 @@ public class LoginPage {
 
     private WebDriver driver;
 
+    Logger logger = LogManager.getRootLogger();
+
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -31,6 +35,7 @@ public class LoginPage {
     public void openLoginPage() {
         driver.manage().deleteAllCookies();
         driver.get(Login_URL);
+        logger.info(Login_URL + " is opened");
     }
 
     public InboxPage signIn(String username, String password) {
@@ -38,6 +43,7 @@ public class LoginPage {
         buttonNext.click();
         inputPassword.sendKeys(password);
         buttonSignIn.click();
+        logger.info(username + " is logged in");
         return new InboxPage(driver);
     }
 }

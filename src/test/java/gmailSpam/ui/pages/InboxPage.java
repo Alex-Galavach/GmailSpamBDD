@@ -1,5 +1,8 @@
 package gmailSpam.ui.pages;
 
+import gmailSpam.utilities.PageHighlightAndScreenShot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -45,6 +48,8 @@ public class InboxPage {
 
 	private WebDriver driver;
 
+    Logger logger = LogManager.getRootLogger();
+
 	public InboxPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -53,10 +58,19 @@ public class InboxPage {
     public void SendEmail(String emailReceiverNameText, String emailSubjectText, String emailBodyText){
 
         emailNew.click();
+        logger.info("New email form opened");
         emailReceiverName.sendKeys(emailReceiverNameText);
+        logger.info(emailReceiverNameText + " set in TO");
+        PageHighlightAndScreenShot.highlightAreaAndScreenShot(driver, emailSubject);
         emailSubject.sendKeys(emailSubjectText);
+        PageHighlightAndScreenShot.highlightAreaAndScreenShot(driver, emailSubject);
+        logger.info(emailSubjectText + " set in Subject");
+        PageHighlightAndScreenShot.highlightAreaAndScreenShot(driver, emailBody);
         emailBody.sendKeys(emailBodyText);
+        PageHighlightAndScreenShot.highlightAreaAndScreenShot(driver, emailBody);
+        logger.info(emailBodyText + " set in mail body");
         emailSendButton.click();
+        logger.info("Mail sent");
     }
 
     public void PageRefresh(){
