@@ -1,8 +1,8 @@
 package gmailSpam.ui.pages;
 
+import gmailSpam.webdriver.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -23,18 +23,15 @@ public class LoginPage {
 
     public static final String Login_URL = "https://accounts.google.com/ServiceLogin?service=mail&continue=https://mail.google.com/mail/#identifier";
 
-    private WebDriver driver;
-
     Logger logger = LogManager.getRootLogger();
 
-    public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+    public LoginPage() {
+        PageFactory.initElements(Browser.getInstance(), this);
     }
 
     public void openLoginPage() {
-        driver.manage().deleteAllCookies();
-        driver.get(Login_URL);
+        Browser.getInstance().manage().deleteAllCookies();
+        Browser.getInstance().get(Login_URL);
         logger.info(Login_URL + " is opened");
     }
 
@@ -44,6 +41,6 @@ public class LoginPage {
         inputPassword.sendKeys(password);
         buttonSignIn.click();
         logger.info(username + " is logged in");
-        return new InboxPage(driver);
+        return new InboxPage();
     }
 }

@@ -7,12 +7,12 @@ import gmailSpam.ui.pages.InboxPage;
 import gmailSpam.ui.pages.LoginPage;
 import gmailSpam.webdriver.Browser;
 
-public class GmailSpamSteps extends Browser {
+public class GmailSpamSteps {
 
 
     @Given("^I received mail from \"([^\"]*)\" with password \"([^\"]*)\" to \"([^\"]*)\" with \"([^\"]*)\" and \"([^\"]*)\"$")
     public void iReceivedMailFromWithToWithAnd(String UserName, String Password, String EmailAddress2, String EmailSubject, String EmailBody) throws Throwable {
-        LoginPage user = new LoginPage(driver);
+        LoginPage user = new LoginPage();
         user.openLoginPage();
         InboxPage inboxPageUser1 = user.signIn(UserName, Password);
         inboxPageUser1.SendEmail(EmailAddress2, EmailSubject, EmailBody);
@@ -21,7 +21,7 @@ public class GmailSpamSteps extends Browser {
 
     @When("^I login as \"([^\"]*)\" with password \"([^\"]*)\" and mark received mail as spam$")
     public void iLoginAsWithPasswordAndMarkReceivedMailAsSpam(String UserName, String Password) throws Throwable {
-        LoginPage user2 = new LoginPage(driver);
+        LoginPage user2 = new LoginPage();
         user2.openLoginPage();
         InboxPage inboxPageUser2 = user2.signIn(UserName, Password);
         inboxPageUser2.MailToSpam();
@@ -31,11 +31,11 @@ public class GmailSpamSteps extends Browser {
 
     @Then("^I as \"([^\"]*)\" with password \"([^\"]*)\" can see mail with \"([^\"]*)\" in Spam folder$")
     public void iAsWithPasswordCanSeeMailWithInSpamFolder(String UserName, String Password, String EmailSubject) throws Throwable {
-        LoginPage user2 = new LoginPage(driver);
+        LoginPage user2 = new LoginPage();
         user2.openLoginPage();
         InboxPage inboxPageUser2 = user2.signIn(UserName, Password);
 
-        if (inboxPageUser2.emailPresenceCheck(driver, EmailSubject)) {
+        if (inboxPageUser2.emailPresenceCheck(Browser.getInstance(), EmailSubject)) {
             inboxPageUser2.Logout();
             System.out.println("Mail in Spam folder as expected.");
         }

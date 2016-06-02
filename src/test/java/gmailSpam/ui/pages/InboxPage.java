@@ -1,6 +1,7 @@
 package gmailSpam.ui.pages;
 
 import gmailSpam.utilities.PageHighlightAndScreenShot;
+import gmailSpam.webdriver.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
@@ -46,13 +47,10 @@ public class InboxPage {
     public static final String Spam_URL = "https://mail.google.com/mail/#spam";
 
 
-	private WebDriver driver;
-
     Logger logger = LogManager.getRootLogger();
 
-	public InboxPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+	public InboxPage() {
+        PageFactory.initElements(Browser.getInstance(), this);
     }
 
     public void SendEmail(String emailReceiverNameText, String emailSubjectText, String emailBodyText){
@@ -61,27 +59,27 @@ public class InboxPage {
         logger.info("New email form opened");
         emailReceiverName.sendKeys(emailReceiverNameText);
         logger.info(emailReceiverNameText + " set in TO");
-        PageHighlightAndScreenShot.highlightAreaAndScreenShot(driver, emailSubject);
+        PageHighlightAndScreenShot.highlightAreaAndScreenShot(Browser.getInstance(), emailSubject);
         emailSubject.sendKeys(emailSubjectText);
-        PageHighlightAndScreenShot.highlightAreaAndScreenShot(driver, emailSubject);
+        PageHighlightAndScreenShot.highlightAreaAndScreenShot(Browser.getInstance(), emailSubject);
         logger.info(emailSubjectText + " set in Subject");
-        PageHighlightAndScreenShot.highlightAreaAndScreenShot(driver, emailBody);
+        PageHighlightAndScreenShot.highlightAreaAndScreenShot(Browser.getInstance(), emailBody);
         emailBody.sendKeys(emailBodyText);
-        PageHighlightAndScreenShot.highlightAreaAndScreenShot(driver, emailBody);
+        PageHighlightAndScreenShot.highlightAreaAndScreenShot(Browser.getInstance(), emailBody);
         logger.info(emailBodyText + " set in mail body");
         emailSendButton.click();
         logger.info("Mail sent");
     }
 
     public void PageRefresh(){
-        driver.navigate().refresh();
+        Browser.getInstance().navigate().refresh();
     }
 
     public void alertIgnore() {
         try {
-            WebDriverWait wait = new WebDriverWait(driver, 2);
+            WebDriverWait wait = new WebDriverWait(Browser.getInstance(), 2);
             wait.until(ExpectedConditions.alertIsPresent());
-            Alert alert = driver.switchTo().alert();
+            Alert alert = Browser.getInstance().switchTo().alert();
             alert.accept();
         }
         catch (Exception ignored) {}
@@ -98,13 +96,13 @@ public class InboxPage {
         logoutIcon.click();
         logoutBotton.click();
         alertIgnore();
-        driver.manage().deleteAllCookies();
-        driver.navigate().refresh();
+        Browser.getInstance().manage().deleteAllCookies();
+        Browser.getInstance().navigate().refresh();
         //driver.navigate().refresh(); //- looks like not needed anymore
     }
 
     public void openSpamPage() {
-        driver.get(Spam_URL);
+        Browser.getInstance().get(Spam_URL);
     }
 
     public Boolean emailPresenceCheck (WebDriver driver, String subjectText) {
